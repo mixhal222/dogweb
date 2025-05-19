@@ -1,0 +1,17 @@
+/* CSS Document */
+/* CSS Document */
+
+body {
+    background-color: pink;
+    text-align: center;
+}
+.gallery {
+    display: inline-block;
+    margin: 5px;
+    border: 1px solid #ccc;
+}
+
+.gallery .description {
+    padding: 15px;
+    text-align: center;
+}
