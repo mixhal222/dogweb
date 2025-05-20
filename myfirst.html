@@ -44,39 +44,55 @@
         }
         .lightbox .prev { left: 5%; }
         .lightbox .next { right: 5%; }
+
+        /* Carousel styles */
+        .carousel-container {
+            position: relative;
+            max-width: 100%;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-image {
+            min-width: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .carousel-dots {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .carousel-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background-color: #717171;
+        }
     </style>
 </head>
 <body>
     <h1>Luka's picture feed</h1>
-   <p>luka's personal gallery</p>
+    <p>luka's personal gallery</p>
 
-    <div class="gallery">
-        <a href="#" data-index="0">
-            <img src="lukababy.jpg" alt="dog" width="80">
-        </a>
-    </div>
-    <div class="gallery">
-        <a href="#" data-index="1">
-            <img src="luka1.jpg" class="img-fluid rounded-circle" alt="dog" width="80">
-        </a>
-    </div>
-    <div class="gallery">
-        <a href="#" data-index="2">
-            <img src="luka2.jpg" class="img-fluid rounded-circle" alt="dog" width="80">
-        </a>
-    </div>
-    <div class="gallery">
-        <a href="#" data-index="3">
-            <img src="lukey.jpg" class="img-fluid rounded-circle" alt="dog" width="80">
-        </a>
-    </div>
-
-    <!-- Lightbox Modal -->
-    <div class="lightbox" id="lightbox">
-        <button class="close" id="closeBtn">&times;</button>
-        <button class="prev" id="prevBtn">&#8592;</button>
-        <img id="lightboxImg" src="" alt="dog">
-        <button class="next" id="nextBtn">&#8594;</button>
+    <!-- Only keep the carousel below -->
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Images will be added here by JavaScript -->
+      </div>
     </div>
 
     <script>
@@ -219,54 +235,38 @@
 
 <script>
 function toggleMenu() {
-  document.getElementById("navMenu").classList.toggle("show");
+  const navMenu = document.getElementById('navMenu');
+  navMenu.classList.toggle('show');
 }
 </script>
-<!-- Swipeable gallery container -->
-<div class="swipe-gallery" id="galleryContainer"></div>
 
+<!-- Add this script to your main HTML file, after the carousel HTML -->
 <script>
-  const gallery = document.getElementById('galleryContainer');
+const imageUrls = [
+  'lukababy.jpg',
+  'luka1.jpg',    
+  'luka2.jpg',
+  'lukey.jpg'
+];
 
-  // 1. Load images from server (a PHP file will list files in LUKAS/)
-  fetch('list-images.php')
-    .then(res => res.json())
-    .then(images => {
-      images.forEach(filename => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'image-wrapper';
+const carouselTrack = document.getElementById("carouselTrack");
+imageUrls.forEach(url => {
+  const img = document.createElement("img");
+  img.src = url;
+  carouselTrack.appendChild(img);
+});
 
-        const img = document.createElement('img');
-        img.src = `dogweb/lukas`;
-        img.alt = filename;
-
-        const btn = document.createElement('button');
-        btn.className = 'delete-btn';
-        btn.textContent = '✖';
-        btn.dataset.filename = filename;
-
-        btn.addEventListener('click', () => {
-          fetch('delete-image.php', {
-            method: 'POST',
-            body: new URLSearchParams({ filename })
-          })
-          .then(res => res.text())
-          .then(response => {
-            if (response.includes('Deleted')) {
-              wrapper.remove();
-            } else {
-              alert('Error: ' + response);
-            }
-          });
-        });
-
-        wrapper.appendChild(img);
-        wrapper.appendChild(btn);
-        gallery.appendChild(wrapper);
-      });
-    });
+// Duplicate images for seamless infinite scroll
+imageUrls.forEach(url => {
+  const img = document.createElement("img");
+  img.src = url;
+  carouselTrack.appendChild(img);
+});
 </script>
 
+<footer style="text-align:center; color:#888; font-size:14px; margin:30px 0 10px 0;">
+  &copy; All rights reserved to michal yaton
+</footer>
+
 </body>
-    <p> all rights reserved to michal yaton </p>
 </html>
