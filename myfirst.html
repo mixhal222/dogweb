@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">   
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">          
+    <title>My Perfect Dog</title>
+    <style>
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 80vw;
+            max-height: 80vh;
+            border-radius: 10px;
+        }
+        .lightbox .close, .lightbox .prev, .lightbox .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            font-size: 2rem;
+            background: rgba(0,0,0,0.5);
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+        }
+        .lightbox .close {
+            top: 10%;
+            right: 5%;
+            transform: none;
+            font-size: 2.5rem;
+        }
+        .lightbox .prev { left: 5%; }
+        .lightbox .next { right: 5%; }
+    </style>
+</head>
+<body>
+    <h1>my perfect dog</h1>
+    luka is so perfect i love him so much
+
+    <div class="gallery">
+        <a href="#" data-index="0">
+            <img src="lukababy.jpg" alt="dog" width="80">
+        </a>
+    </div>
+    <div class="gallery">
+        <a href="#" data-index="1">
+            <img src="luka1.jpg" class="img-fluid rounded-circle" alt="dog" width="80">
+        </a>
+    </div>
+    <div class="gallery">
+        <a href="#" data-index="2">
+            <img src="luka2.jpg" class="img-fluid rounded-circle" alt="dog" width="80">
+        </a>
+    </div>
+    <div class="gallery">
+        <a href="#" data-index="3">
+            <img src="lukey.jpg" class="img-fluid rounded-circle" alt="dog" width="80">
+        </a>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <button class="close" id="closeBtn">&times;</button>
+        <button class="prev" id="prevBtn">&#8592;</button>
+        <img id="lightboxImg" src="" alt="dog">
+        <button class="next" id="nextBtn">&#8594;</button>
+    </div>
+
+    <script>
+        const images = [
+            'lukababy.jpg',
+            'luka1.jpg',
+            'luka2.jpg',
+            'lukey.jpg'
+        ];
+        let currentIndex = 0;
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const closeBtn = document.getElementById('closeBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        document.querySelectorAll('.gallery a').forEach((a, idx) => {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentIndex = idx;
+                showLightbox();
+            });
+        });
+
+        function showLightbox() {
+            lightboxImg.src = images[currentIndex];
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showLightbox();
+        }
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % images.length;
+            showLightbox();
+        }
+
+        closeBtn.addEventListener('click', closeLightbox);
+        prevBtn.addEventListener('click', showPrev);
+        nextBtn.addEventListener('click', showNext);
+
+        // Optional: close on background click
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Optional: keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'ArrowLeft') showPrev();
+            if (e.key === 'ArrowRight') showNext();
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html></a>
