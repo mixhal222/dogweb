@@ -238,6 +238,20 @@ function toggleMenu() {
   const navMenu = document.getElementById('navMenu');
   navMenu.classList.toggle('show');
 }
+
+// Hide menu when clicking/tapping outside
+document.addEventListener('click', function(event) {
+  const navMenu = document.getElementById('navMenu');
+  const menuIcon = document.querySelector('.menu-icon');
+  // If menu is open and click is outside menu and icon, close it
+  if (
+    navMenu.classList.contains('show') &&
+    !navMenu.contains(event.target) &&
+    !menuIcon.contains(event.target)
+  ) {
+    navMenu.classList.remove('show');
+  }
+});
 </script>
 
 <!-- Add this script to your main HTML file, after the carousel HTML -->
