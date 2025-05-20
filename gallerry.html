@@ -2,8 +2,58 @@
 <html>
 <head>
   <title>Lukas Gallery</title>
+  <style>
+    /* Basic hamburger styling */
+    .menu-icon {
+      font-size: 2em;
+      cursor: pointer;
+      user-select: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 999;
+    }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: white;
+      width: 200px;
+      height: 100vh;
+      padding: 60px 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    .nav-links a {
+      display: block;
+      margin: 10px 0;
+      text-decoration: none;
+      font-size: 18px;
+      color: black;
+    }
+    .nav-links.show {
+      display: block;
+    }
+  </style>
 </head>
 <body>
+    <!-- Hamburger icon -->
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+
+    <!-- Menu links -->
+    <div class="nav-links" id="navMenu">
+      <a href="myfirst.html">🏠 Home</a>
+      <a href="gallerry.html">📸 Lukas Gallery</a>
+      <a href="login.html">🔐 Admin Access</a>
+    </div>
+
+    <script>
+      function toggleMenu() {
+        const navMenu = document.getElementById('navMenu');
+        navMenu.classList.toggle('show');
+      }
+    </script>
+
     <h1>Luka's Pictures 🐶</h1>
     <div id="gallery"></div>
 
@@ -119,62 +169,5 @@
             });
         });
     </script>
-  <head>
-  <title>Lukas Gallery</title>
-  <style>
-    /* Basic hamburger styling */
-    .menu-icon {
-      font-size: 30px;
-      cursor: pointer;
-      user-select: none;
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 999;
-    }
-    .nav-links {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background-color: white;
-      width: 200px;
-      height: 100vh;
-      padding: 60px 20px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    }
-    .nav-links a {
-      display: block;
-      margin: 10px 0;
-      text-decoration: none;
-      font-size: 18px;
-      color: black;
-    }
-    .nav-links.show {
-      display: block;
-    }
-  </style>
-</head>
-<body>
-    <!-- Hamburger icon -->
-    <div class="menu-icon" onclick="toggleMenu()">☰</div>
-
-    <!-- Menu links -->
-    <div class="nav-links" id="navMenu">
-      <a href="myfirst.html">🏠 Home</a>
-      <a href="gallerry.html">📸 Lukas Gallery</a>
-      <a href="login.html">🔐 Admin Access</a>
-    </div>
-
-    <script>
-      function toggleMenu() {
-        const navMenu = document.getElementById('navMenu');
-        navMenu.classList.toggle('show');
-      }
-    </script>
-    <!-- ...rest of your gallery code... -->
-    <h1>Luka's Pictures 🐶</h1>
-    <div id="gallery"></div>
-    <!-- Modal and scripts remain unchanged -->
 </body>
 </html>
