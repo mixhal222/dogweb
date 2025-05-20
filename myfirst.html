@@ -138,5 +138,36 @@
             if (e.key === 'Escape') closeLightbox();
         });
     </script>
+    <div id="gallery"></div>
+
+<script>
+  const username = "mixhal222";
+  const repo = "dogweb";
+  const folder = "lukas"; // ← changed from lucas to lukas
+
+  async function loadImages() {
+    const url = https://api.github.com/repos/${username}/${repo}/contents/${folder};
+    try {
+      const response = await fetch(url);
+      const files = await response.json();
+
+      const gallery = document.getElementById("gallery");
+
+      files.forEach(file => {
+        if (file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
+          const img = document.createElement("img");
+          img.src = file.download_url;
+          img.style.maxWidth = "250px";
+          img.style.margin = "10px";
+          img.style.borderRadius = "8px";
+          gallery.appendChild(img);
+        }
+      });
+    } catch (error) {
+      console.error("Error loading images:", error);
+    }
+  }
+    loadImages();
+</script>
 </body>
 </html></a>
