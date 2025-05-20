@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login to Manage Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+  <h2>Lucas Manager Login</h2>
+  <input type="password" id="password" placeholder="Enter password">
+  <button onclick="login()">Login</button>
+
+  <div id="manager" style="display:none;">
+    <h3>Welcome, Michal 🎉</h3>
+    <p>To upload new images, go to your <a href="https://github.com/mixhal222/dogweb/tree/main/lukas" target="_blank">Lukas folder on GitHub</a> and add photos.</p>
+    <p>The gallery will update automatically on refresh.</p>
+  </div>
+
+  <script>
+    function login() {
+      const pass = document.getElementById("password").value;
+      if (pass === "lukas123") { // ← Change this to your secret
+        document.getElementById("manager").style.display = "block";
+      } else {
+        alert("Incorrect password");
+      }
+    }
+  </script>
+  <style>
+/* Basic hamburger styling */
+.menu-icon {
+  font-size: 30px;
+  cursor: pointer;
+  user-select: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 999;
+}
+
+.nav-links {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  width: 200px;
+  height: 100vh;
+  padding: 60px 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.nav-links a {
+  display: block;
+  margin: 10px 0;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+}
+
+.nav-links.show {
+  display: block;
+}
+</style>
+
+<!-- Hamburger icon -->
+<div class="menu-icon" onclick="toggleMenu()">☰</div>
+
+<!-- Menu links -->
+<div class="nav-links" id="navMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="gallery.html">📸 Lukas Gallery</a>
+  <a href="login.html">🔐 Admin Access</a>
+</div>
+
+<script>
+function toggleMenu() {
+  document.getElementById("navMenu").classList.toggle("show");
+}
+</script>
+</body>
+<script>
+  // Get the file input and the swipeable gallery container
+  const input = document.getElementById('uploadInput');
+  const gallery = document.getElementById('gallerry.html');
+
+  // When the user selects files
+  input.addEventListener('change', function () {
+    // Loop through each selected file
+    Array.from(this.files).forEach(file => {
+      // Make sure it's an image
+      if (!file.type.startsWith('image/')) return;
+
+      // Create a new FileReader
+      const reader = new FileReader();
+
+      // When the image is loaded
+      reader.onload = function (e) {
+        // Create a new image element
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = "Uploaded image";
+
+        // Optional: style in case CSS is missing
+        img.style.width = '200px';
+        img.style.height = '120px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '8px';
+        img.style.flex = '0 0 auto';
+        img.style.scrollSnapAlign = 'start';
+        img.style.border = '2px solid #ccc';
+        img.style.marginRight = '10px';
+
+        // Add the image to the swipe gallery
+        gallery.appendChild(img);
+      };
+
+      // Read the file as a data URL
+      reader.readAsDataURL(file);
+    });
+  });
+</script>#
+<a href="myfirst.html" class="back-home-btn">← Back to Homepage</a>
+</html>

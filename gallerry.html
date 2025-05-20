@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lukas Gallery</title>
+</head>
+<body>
+  <h1>Lucas Pictures 🐶</h1>
+  <div id="gallery"></div>
+
+  <script>
+    const folder = "lukas";
+    const repo = "mixhal222/dogweb";
+
+    fetch(`https://api.github.com/repos/${repo}/contents/${folder}`)
+      .then(res => res.json())
+      .then(files => {
+        const gallery = document.getElementById("gallery");
+        files.forEach(file => {
+          if (file.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            const img = document.createElement("img");
+            img.src = file.download_url;
+            img.style.width = "200px";
+            img.style.margin = "10px";
+            gallery.appendChild(img);
+          }
+        });
+      });
+  </script>
+</body>
+</html>
