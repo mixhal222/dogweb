@@ -137,37 +137,135 @@
             if (e.key === 'ArrowRight') showNext();
             if (e.key === 'Escape') closeLightbox();
         });
+
     </script>
-    <div id="gallery"></div>
+
+
+    <script>
+      const username = "mixhal222";
+      const repo = "dogweb";
+      const folder = "lukas"; // ← changed from lucas to lukas
+
+      async function loadImages() {
+        const url = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
+        try {
+          const response = await fetch(url);
+          const files = await response.json();
+
+          const gallery = document.getElementById("gallery");
+
+          files.forEach(file => {
+            if (file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
+              const img = document.createElement("img");
+              img.src = file.download_url;
+              img.style.maxWidth = "250px";
+              img.style.margin = "10px";
+              img.style.borderRadius = "8px";
+              gallery.appendChild(img);
+            }
+          });
+        } catch (error) {
+          console.error("Error loading images:", error);
+        }
+      }
+      loadImages();
+    </script>
+<style>
+/* Basic hamburger styling */
+.menu-icon {
+  font-size: 30px;
+  cursor: pointer;
+  user-select: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 999;
+}
+
+.nav-links {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  width: 200px;
+  height: 100vh;
+  padding: 60px 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.nav-links a {
+  display: block;
+  margin: 10px 0;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+}
+
+.nav-links.show {
+  display: block;
+}
+</style>
+
+<!-- Hamburger icon -->
+<div class="menu-icon" onclick="toggleMenu()">☰</div>
+
+<!-- Menu links -->
+<div class="nav-links" id="navMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="gallery.html">📸 Lukas Gallery</a>
+  <a href="login.html">🔐 Admin Access</a>
+</div>
 
 <script>
-  const username = "mixhal222";
-  const repo = "dogweb";
-  const folder = "lukas"; // ← changed from lucas to lukas
-
-  async function loadImages() {
-    const url = https://api.github.com/repos/$mixhal222/$dogweb$images{lukas};
-    try {
-      const response = await fetch(url);
-      const files = await response.json();
-
-      const gallery = document.getElementById("gallery");
-
-      files.forEach(file => {
-        if (file.type === "file" && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name)) {
-          const img = document.createElement("img");
-          img.src = file.download_url;
-          img.style.maxWidth = "250px";
-          img.style.margin = "10px";
-          img.style.borderRadius = "8px";
-          gallery.appendChild(img);
-        }
-      });
-    } catch (error) {
-      console.error("Error loading images:", error);
-    }
-  }
-    loadImages();
+function toggleMenu() {
+  document.getElementById("navMenu").classList.toggle("show");
+}
 </script>
+<!-- Swipeable gallery container -->
+<div class="swipe-gallery" id="galleryContainer"></div>
+
+<script>
+  const gallery = document.getElementById('galleryContainer');
+
+  // 1. Load images from server (a PHP file will list files in LUKAS/)
+  fetch('list-images.php')
+    .then(res => res.json())
+    .then(images => {
+      images.forEach(filename => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'image-wrapper';
+
+        const img = document.createElement('img');
+        img.src = `LUKAS/${filename}`;
+        img.alt = filename;
+
+        const btn = document.createElement('button');
+        btn.className = 'delete-btn';
+        btn.textContent = '✖';
+        btn.dataset.filename = filename;
+
+        btn.addEventListener('click', () => {
+          fetch('delete-image.php', {
+            method: 'POST',
+            body: new URLSearchParams({ filename })
+          })
+          .then(res => res.text())
+          .then(response => {
+            if (response.includes('Deleted')) {
+              wrapper.remove();
+            } else {
+              alert('Error: ' + response);
+            }
+          });
+        });
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(btn);
+        gallery.appendChild(wrapper);
+      });
+    });
+</script>
+
 </body>
-</html></a>
+</html>
