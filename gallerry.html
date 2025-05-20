@@ -4,27 +4,120 @@
   <title>Lukas Gallery</title>
 </head>
 <body>
-  <h1>Lucas Pictures 🐶</h1>
-  <div id="gallery"></div>
+    <h1>Luka's Pictures 🐶</h1>
+    <div id="gallery"></div>
 
-  <script>
-    const folder = "lukas";
-    const repo = "mixhal222/dogweb";
+    <!-- Modal for image preview -->
+    <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+        <span id="closeModal" style="position:absolute; top:20px; right:40px; color:white; font-size:2em; cursor:pointer;">&times;</span>
+        <button id="prevBtn" style="position:absolute; left:30px; top:50%; transform:translateY(-50%); font-size:2em; background:none; border:none; color:white; cursor:pointer; z-index:1001;">&#8592;</button>
+        <img id="modalImg" src="" style="max-width:90vw; max-height:90vh; border-radius:10px;" />
+        <button id="nextBtn" style="position:absolute; right:30px; top:50%; transform:translateY(-50%); font-size:2em; background:none; border:none; color:white; cursor:pointer; z-index:1001;">&#8594;</button>
+    </div>
 
-    fetch(`https://api.github.com/repos/${repo}/contents/${folder}`)
-      .then(res => res.json())
-      .then(files => {
-        const gallery = document.getElementById("gallery");
-        files.forEach(file => {
-          if (file.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
-            const img = document.createElement("img");
-            img.src = file.download_url;
-            img.style.width = "200px";
-            img.style.margin = "10px";
-            gallery.appendChild(img);
-          }
+    <script>
+        const folder = "lukas";
+        const repo = "mixhal222/dogweb";
+
+        fetch(`https://api.github.com/repos/${repo}/contents/${folder}`)
+            .then(res => res.json())
+            .then(files => {
+                const gallery = document.getElementById("gallery");
+                files.forEach(file => {
+                    if (file.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                        const img = document.createElement("img");
+                        img.src = file.download_url;
+                        img.style.width = "200px";
+                        img.style.margin = "10px";
+                        img.style.cursor = "pointer";
+                        gallery.appendChild(img);
+                    }
+                });
+            });
+    </script>
+    <script>
+        let currentIndex = 0;
+        let imageLinks = [];
+
+        function showImage(index) {
+            if (imageLinks.length === 0) return;
+            currentIndex = (index + imageLinks.length) % imageLinks.length;
+            const modal = document.getElementById("modal");
+            const modalImg = document.getElementById("modalImg");
+            modalImg.src = imageLinks[currentIndex];
+            modal.style.display = "flex";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const gallery = document.getElementById("gallery");
+            const modal = document.getElementById("modal");
+            const modalImg = document.getElementById("modalImg");
+            const closeModal = document.getElementById("closeModal");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+
+            fetch(`https://api.github.com/repos/mixhal222/dogweb/contents/lukas`)
+                .then(res => res.json())
+                .then(files => {
+                    imageLinks = files
+                        .filter(file => file.name.match(/\.(jpg|jpeg|png|gif)$/i))
+                        .map(file => file.download_url);
+
+                    gallery.querySelectorAll("img").forEach((img, idx) => {
+                        img.addEventListener("click", () => {
+                            currentIndex = idx;
+                            showImage(currentIndex);
+                        });
+
+                        let startX = 0;
+                        img.addEventListener("touchstart", e => {
+                            startX = e.touches[0].clientX;
+                        });
+                        img.addEventListener("touchend", e => {
+                            let endX = e.changedTouches[0].clientX;
+                            if (endX - startX > 50) {
+                                showImage(idx - 1);
+                            } else if (startX - endX > 50) {
+                                showImage(idx + 1);
+                            }
+                        });
+                    });
+                });
+
+            // Add swipe support to modal image
+            let modalStartX = 0;
+            modalImg.addEventListener("touchstart", e => {
+                modalStartX = e.touches[0].clientX;
+            });
+            modalImg.addEventListener("touchend", e => {
+                let modalEndX = e.changedTouches[0].clientX;
+                if (modalEndX - modalStartX > 50) {
+                    showImage(currentIndex - 1); // Swipe right: previous
+                } else if (modalStartX - modalEndX > 50) {
+                    showImage(currentIndex + 1); // Swipe left: next
+                }
+            });
+
+            closeModal.addEventListener("click", () => {
+                modal.style.display = "none";
+                modalImg.src = "";
+            });
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                    modalImg.src = "";
+                }
+            });
+
+            prevBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                showImage(currentIndex - 1);
+            });
+            nextBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                showImage(currentIndex + 1);
+            });
         });
-      });
-  </script>
+    </script>
 </body>
 </html>
